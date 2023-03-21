@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Formulario de alta de estudiante</h1>
+    <form th:object="${estudiante}">
+
+    <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" id="nombre" th:field="*{nombre}">
+    </form>
+
+    <!-- ¿Como funciona un formulario html? -->
+    <!-- <form action="/altaEstudiante" method="post"> -->
+    <!-- Los input no tienen etiqueta de cierre. Solicita algo-->
+    <!-- <input name="nombre" , placeholder="Escriba su nombre, por favor" type="text">
+
+        <input name="primerApellido" , placeholder="Apellido" type="text">
+        <input name="segundoApellido" , placeholder="Apellido" type="text">
+
+        <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+        <input name="fechaNacimiento" type="date" id="fechaNacimiento">
+
+        para recoger la info que damos atraves de la web : -->
+    <!-- <input type="submit" value="Enviar">  -->
+
+    <!-- </form> -->
+</body>
+
+</html>
