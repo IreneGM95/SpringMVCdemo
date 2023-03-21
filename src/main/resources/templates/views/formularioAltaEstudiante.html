@@ -52,18 +52,17 @@
 
         <label for="idFacultad">Facultad:</label>
         <!-- Si lo hicieramos a mano, sería: -->
-        <!-- <select name="facultad" id="idFacultad" required>
-            <option></option> -->
+        <!-- <select name="facultad" id="idFacultad" required>           <option></option> -->
         <!-- primera opción en blanco -->
-        <!-- <option value="1">Informatica</option>
-            <option value="2">Biología</option> -->
+        <!-- <option value="1">Informatica</option>  <option value="2">Biología</option> -->
 
         <!-- Pero no se introduce cualquier facultad, sino que utilizamos un desplegable que muestre las facultades creadas -->
+        <!-- es necesario acceder a la facultad atraves del controller -->
         <select name="idFacultad" id="idFacultad" required>
             <option></option>
             <!-- primera opción en blanco -->
-
-            <!-- <input type="text" name="facultad" id="facultad" th:field="*{facultad}" required> -->
+            <option th:each="facultad : ${facultades}" th:value="${facultad.id}" th:text="${facultad.nombre}"></option>
+            <!-- saca una facultad de cada iteración y se obtiene el id como valor que enviar al servidor -->
         </select>
 
         <!-- Para enviar el formulario: -->
