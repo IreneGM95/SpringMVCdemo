@@ -1,3 +1,4 @@
+<!-- Se renderiza lo que se resuelve en el servidor, es decir, se pone en un lenguaje que entienda y pueda mostrar en la web -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,6 +27,7 @@
         </thead>
 
         <tbody>
+            <!-- La extensión "each" de thymeleaf (th) es el equivalente a un for mejorado -->
             <tr th:each=" estudiante : ${estudiantes}">
                 <td th:text="${estudiante.id}"></td>
                 <td th:text="${estudiante.nombre}"></td>
