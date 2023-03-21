@@ -32,15 +32,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Estudiante implements Serializable {
-    private static final long serialVersionUID = 1L;  
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotNull (message = "El nombre no puede ser null")
-    @Size( max = 25, min = 4)
+    @NotNull(message = "El nombre no puede ser null")
+    @Size(max = 25, min = 4)
     private String nombre;
+
     private String primerApellido;
     private String segundoApellido;
     private LocalDate fechaAlta;
@@ -48,10 +49,10 @@ public class Estudiante implements Serializable {
     private Genero genero;
     private double beca;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST) 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idFacultad")
     private Facultad facultad;
-    
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, mappedBy = "estudiante")
     private List<Telefono> telefonos;
 
@@ -59,5 +60,4 @@ public class Estudiante implements Serializable {
         HOMBRE, MUJER, OTRO
     }
 
-    
 }
