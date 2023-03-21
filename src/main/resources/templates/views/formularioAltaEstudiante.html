@@ -12,8 +12,62 @@
     <h1>Formulario de alta de estudiante</h1>
     <form th:object="${estudiante}">
 
-    <label for="nombre">Nombre:</label>
-        <input type="text" name="nombre" id="nombre" th:field="*{nombre}">
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" id="nombre" th:field="*{nombre}" required>
+        <!-- input no necesita cierre -->
+        <!-- th:field rige qué campo se rellena, name se puede quitar -->
+        <!-- Para que no pueda ser null en el formulario, se pone required. Si no se completa, no sale de la vista y no se envia al servidor-->
+
+        <label for="primerApellido">Primer Apellido:</label>
+        <input type="text" name="primerApellido" id="primerApellido" th:field="*{primerApellido}" required>
+
+        <label for="segundoApellido">Segundo Apellido:</label>
+        <input type="text" name="segundoApellido" id="segundoApellido" th:field="*{segundoApellido}">
+
+        <label for="fechaAlta">Fecha de alta:</label>
+        <input type="date" name="fechaAlta" id="fechaAlta" th:field="*{fechaAlta}">
+
+        <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+        <input type="" name="fechaNacimiento" id="fechaNacimiento" th:field="*{fechaNacimiento}">
+
+        <fieldset>
+            <!-- el genero es un enumerable, asi que usamos un radio botón para seleccionarlo -->
+            <legend>Genero</legend>
+            <label for="mujer">Mujer</label>
+            <input type="radio" id="mujer" name="genero" value="MUJER" th:field="*{genero}">
+
+            <label for="hombre">Hombre</label>
+            <input type="radio" id="hombre" name="genero" value="HOMBRE" th:field="*{genero}">
+
+            <label for="otro">Otro</label>
+            <input type="radio" id="otro" name="genero" value="OTRO" th:field="*{genero}">
+            <!-- Los radio botones han de ser mutuamente excluyentes, por eso añadimos name="gnero", esto le indica qe hacen referencia al mismo genero y cuando le metamos datos solo meta un valor -->
+        </fieldset>
+
+
+        <label for="beca">Beca:</label>
+        <input type="text" name="beca" id="beca" th:field="*{beca}">
+        <!-- la beca es un double, pero aqui lo ponemos como text y gracias al field entiende que es un double y lo convierte-->
+
+
+        <label for="idFacultad">Facultad:</label>
+        <!-- Si lo hicieramos a mano, sería: -->
+        <!-- <select name="facultad" id="idFacultad" required>
+            <option></option> -->
+        <!-- primera opción en blanco -->
+        <!-- <option value="1">Informatica</option>
+            <option value="2">Biología</option> -->
+
+        <!-- Pero no se introduce cualquier facultad, sino que utilizamos un desplegable que muestre las facultades creadas -->
+        <select name="idFacultad" id="idFacultad" required>
+            <option></option>
+            <!-- primera opción en blanco -->
+
+            <!-- <input type="text" name="facultad" id="facultad" th:field="*{facultad}" required> -->
+        </select>
+
+        <!-- Para enviar el formulario: -->
+        <input type="submit" value="ALTA">
     </form>
 
     <!-- ¿Como funciona un formulario html? -->
@@ -24,8 +78,8 @@
         <input name="primerApellido" , placeholder="Apellido" type="text">
         <input name="segundoApellido" , placeholder="Apellido" type="text">
 
-        <label for="fechaNacimiento">Fecha de Nacimiento:</label>
-        <input name="fechaNacimiento" type="date" id="fechaNacimiento">
+        <label for="facultad">Fecha de Nacimiento:</label>
+        <input name="facultad" type="date" id="facultad">
 
         para recoger la info que damos atraves de la web : -->
     <!-- <input type="submit" value="Enviar">  -->
