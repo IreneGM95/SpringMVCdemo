@@ -1,7 +1,9 @@
 package com.example.controllers;
 
 import java.lang.ProcessBuilder.Redirect;
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,13 +12,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.entities.Estudiante;
 import com.example.entities.Facultad;
+import com.example.entities.Telefono;
 import com.example.services.EstudianteService;
 import com.example.services.FacultadService;
+import com.example.services.TelefonoService;
 
 @Controller
 @RequestMapping("/")
@@ -26,11 +31,21 @@ public class MainController {
      * verbo(get, put, delate, post...) del protocolo http utilizado para realizar
      * la peticion
      */
+
+    /**
+     * Logger registra todo lo que pasa en esta clase, MainController, para saber
+     * todo lo que pasa y poder "hacer un analisis postmortem" si algo va mal
+     */
+    private static final Logger LOG = Logger.getLogger("MainController");
+
     @Autowired
     private FacultadService facultadService;
 
     @Autowired
     private EstudianteService estudianteService;
+
+    @Autowired
+    private TelefonoService telefonoService;
 
     /** Este metodo devuelve un listado de estudiantes: */
     @GetMapping("/listar")
@@ -67,9 +82,43 @@ public class MainController {
      * se muestre el último creado
      */
     @PostMapping("/altaEstudiante")
-    public String altaEstudiante(@ModelAttribute Estudiante estudiante) {
+    public String altaEstudiante(@ModelAttribute Estudiante estudiante,
+            @RequestParam(name = "numerosTelefonos") String telefonosRecibidos) {
 
+        // gracias al log nos da un mensaje de comprobación antes de procesar la
+        // información. Es una buena práctica de programación hacer esta comprobación
+        // previa
+        LOG.info("Telefonos recibidos: " + telefonosRecibidos);
+
+        List<String> listadoNumerosTelefono = null; // la declaramos fuera,para poder utilizarla en varios sitios. Y le
+                                                    // asignamos null, porque dentro de un método siempre hay que
+                                                    // inicializarla (asignarle valor) para que funcione
+
+        // No queremos guardar telefonos si no los hay, por eso ponemos el if
+        if (telefonosRecibidos != null) {
+            String[] arrayTelefonos = telefonosRecibidos.split(";"); // separa el array cada vez que encuentra un ;,
+                                                                     // podría pedirle que separase cada vez que
+                                                                     // encuentre un espacio
+            // Convertimos este array en una colección para luego pasarlo a flujo y trabajar
+            // con ese flujo:
+            listadoNumerosTelefono = Arrays.asList(arrayTelefonos);
+        }
+
+        // Primero se guarda el estudiante para despues poder acceder a él a la hora de
+        // meterle los telefonos
         estudianteService.save(estudiante);
+
+        // si sí hay telefonos, el flujo lo recorremos e introducimos
+        if (listadoNumerosTelefono != null) {
+            listadoNumerosTelefono.stream().forEach(n -> {
+                Telefono telefonoObject = Telefono.builder()
+                        .numero(n)
+                        .estudiante(estudiante)
+                        .build();
+
+                telefonoService.save(telefonoObject);
+            });
+        }
 
         return "redirect:/listar";
     }

@@ -58,12 +58,17 @@
 
         <!-- Pero no se introduce cualquier facultad, sino que utilizamos un desplegable que muestre las facultades creadas -->
         <!-- es necesario acceder a la facultad atraves del controller -->
-        <select name="idFacultad" id="idFacultad" required>
+        <select name="facultad" id="idFacultad" required>
             <option></option>
             <!-- primera opción en blanco -->
             <option th:each="facultad : ${facultades}" th:value="${facultad.id}" th:text="${facultad.nombre}"></option>
             <!-- saca una facultad de cada iteración y se obtiene el id como valor que enviar al servidor -->
         </select>
+
+        <label for="numerosTelefonos">Telefono(s)</label>
+        <input type="text" name="nuemerosTelefonos" id="numerosTelefonos"
+            placeholder="Uno o varios, separados por punto y coma">
+        <!-- si al name lo llamamos tlefonos a secas nos daría erros -->
 
         <!-- Para enviar el formulario: -->
         <input type="submit" value="ALTA">
