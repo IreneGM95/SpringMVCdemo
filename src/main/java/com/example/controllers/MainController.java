@@ -1,5 +1,6 @@
 package com.example.controllers;
 
+import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.entities.Estudiante;
 import com.example.entities.Facultad;
@@ -49,7 +51,7 @@ public class MainController {
     public String formularioAltaEstudiante(Model model) {
 
         // Metodo que muestre una lista de facultades
-        List<Facultad> facultades = facultadService.findAll(); //esto se le manda al modelo abajo
+        List<Facultad> facultades = facultadService.findAll(); // esto se le manda al modelo abajo
 
         // modelo creado antes del formulario
         model.addAttribute("estudiante", new Estudiante());
@@ -57,18 +59,16 @@ public class MainController {
 
         return "views/formularioAltaEstudiante";
 
-        
-
     }
-}
-        return "views/formularioAltaEstudiante";  
-     }
 
-     /**Metodo que recibe los datos procedenttes de los controladores del formulario */
-@PostMapping("/altaEstudiante")
-public void altaEstudiante() {
+    /**
+     * Metodo que recibe los datos procedentes de los controladores del formulario y
+     * se muestre el último creado
+     */
+    @PostMapping("/altaEstudiante")
+    public String altaEstudiante() {
 
-}
-
-
+        return "redirect:/listar";
     }
+
+}
