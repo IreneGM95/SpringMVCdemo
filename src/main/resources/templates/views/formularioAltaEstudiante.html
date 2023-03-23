@@ -9,9 +9,15 @@
 </head>
 
 <body>
-    <h1>Formulario de alta de estudiante</h1>
-    <form th:object="${estudiante}" th:action="@{/altaEstudiante}" method="post">
+    <h1>Formulario de alta/modificación de estudiante</h1>
+    <form th:object="${estudiante}" th:action="@{/altaModificacionEstudiante}" method="post">
 
+        <!-- Guardar en un input oculto el id del estudiante: -->
+        <input type="hidden" name="id" th:value="${estudiante.id} ">
+        <!-- no hace falta evaluar el id del estudiante con un ternario -->
+
+
+        <!-- Resto de campos: -->
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" id="nombre" th:field="*{nombre}" required>
         <!-- input no necesita cierre -->
@@ -61,20 +67,23 @@
         <select name="facultad" id="idFacultad" required>
             <option></option>
             <!-- primera opción en blanco -->
-            <option th:each="facultad : ${facultades}" th:value="${facultad.id}" th:text="${facultad.nombre}"></option>
+            <option th:each="facultad : ${facultades}" 
+            th:value="${facultad.id}" th:text="${facultad.nombre}"
+                th:selected="${estudiante.facultad != null and facultad.id == estudiante.facultad.id}"></option>
             <!-- saca una facultad de cada iteración y se obtiene el id como valor que enviar al servidor -->
         </select>
 
         <label for="numerosTelefonos">Telefono(s)</label>
         <input type="text" name="nuemerosTelefonos" id="numerosTelefonos"
-            placeholder="Uno o varios, separados por punto y coma">
+            placeholder="Uno o varios, separados por punto y coma" 
+            th:value="${telefonos}">
         <!-- si al name lo llamamos tlefonos a secas nos daría erros -->
 
         <!-- Para enviar el formulario: -->
         <input type="submit" value="ALTA">
     </form>
 
-    <!-- ¿Como funciona un formulario html? -->
+    <!-- ¿Como funciona un formulario html? Ejemplo simple:-->
     <!-- <form action="/altaEstudiante" method="post"> -->
     <!-- Los input no tienen etiqueta de cierre. Solicita algo-->
     <!-- <input name="nombre" , placeholder="Escriba su nombre, por favor" type="text">

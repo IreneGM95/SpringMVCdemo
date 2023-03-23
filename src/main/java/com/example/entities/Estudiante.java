@@ -49,11 +49,12 @@ public class Estudiante implements Serializable {
     private Genero genero;
     private double beca;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    // usamos fetchtype lazy para que no mantenga una conexión activa entre las tablas como harí eager, porque en telefonos tenemos persist. al usar lazy no estamos consumiendo un recurso ? 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idFacultad")
     private Facultad facultad;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, mappedBy = "estudiante")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "estudiante")
     private List<Telefono> telefonos;
 
     public enum Genero {

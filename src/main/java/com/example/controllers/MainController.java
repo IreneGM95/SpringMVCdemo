@@ -3,13 +3,17 @@ package com.example.controllers;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,8 +73,10 @@ public class MainController {
         // Metodo que muestre una lista de facultades
         List<Facultad> facultades = facultadService.findAll(); // esto se le manda al modelo abajo
 
+        Estudiante estudiante = new Estudiante();
+
         // modelo creado antes del formulario
-        model.addAttribute("estudiante", new Estudiante());
+        model.addAttribute("estudiante", estudiante);
         model.addAttribute("facultades", facultades);
 
         return "views/formularioAltaEstudiante";
@@ -81,7 +87,7 @@ public class MainController {
      * Metodo que recibe los datos procedentes de los controladores del formulario y
      * se muestre el último creado
      */
-    @PostMapping("/altaEstudiante")
+    @PostMapping("/altaModificacionEstudiante")
     public String altaEstudiante(@ModelAttribute Estudiante estudiante,
             @RequestParam(name = "numerosTelefonos") String telefonosRecibidos) {
 
@@ -89,7 +95,11 @@ public class MainController {
         // información. Es una buena práctica de programación hacer esta comprobación
         // previa
         LOG.info("Telefonos recibidos: " + telefonosRecibidos);
+ // Primero se guarda el estudiante para despues poder acceder a él a la hora de
+        // meterle los telefonos
+        estudianteService.save(estudiante);
 
+       
         List<String> listadoNumerosTelefono = null; // la declaramos fuera,para poder utilizarla en varios sitios. Y le
                                                     // asignamos null, porque dentro de un método siempre hay que
                                                     // inicializarla (asignarle valor) para que funcione
@@ -104,12 +114,11 @@ public class MainController {
             listadoNumerosTelefono = Arrays.asList(arrayTelefonos);
         }
 
-        // Primero se guarda el estudiante para despues poder acceder a él a la hora de
-        // meterle los telefonos
-        estudianteService.save(estudiante);
+       
 
         // si sí hay telefonos, el flujo lo recorremos e introducimos
         if (listadoNumerosTelefono != null) {
+            telefonoService.deleteByEstudiante(estudiante);
             listadoNumerosTelefono.stream().forEach(n -> {
                 Telefono telefonoObject = Telefono.builder()
                         .numero(n)
@@ -123,4 +132,42 @@ public class MainController {
         return "redirect:/listar";
     }
 
+    /** Método para actualizar un estudiante dado su id */
+    @GetMapping("/frmActualizar/{id}")
+    // como se hace a través de un link, es un get y es visible para todos, solo es
+    // post si se lo especificamos nosotros a la hora de hacer un formulario
+    // recogerlo es por get y mostrarlo por post?
+    public String fmrActualizarEstudiante(@PathVariable(name = "id") int idEstudiante, Model model) {
+
+        Estudiante estudiante = estudianteService.findById(idEstudiante);
+
+        List<Telefono> todosTelefonos = telefonoService.findAll();
+
+        List<Telefono> telefonosEstudiante = todosTelefonos
+                .stream()
+                .filter(telefono -> telefono.getEstudiante().getId() == idEstudiante)
+                .collect(Collectors.toList());
+        // sería más eficiente usar una consulta de mysql, pero en este caso no lo vamos
+        // a hacer pporque vamos mal de tiempo y profundizaremos en mysql mas adelante
+
+        String numerosDeTelefono = telefonosEstudiante.stream().map(t -> t.getNumero())
+                .collect(Collectors.joining(";"));
+
+        List<Facultad> facultades = facultadService.findAll();
+
+        model.addAttribute("estudiante", estudiante);
+        model.addAttribute("telefonos", telefonosEstudiante);
+
+        // Para que en el formulario nos deje modificar/visualizar la facultad de un
+        // estudiante ya creado:
+        model.addAttribute("facultades", facultades);
+
+        return "views/formularioAltaEstudiante";
+    }
+
+    @GetMapping("/borrar/{id}")
+    public String borrarEstudiante(@PathVariable(name= "id") int idEstudiante) {
+        estudianteService.delete(estudianteService.findById(idEstudiante));
+        return "redirect:/listar";
+    }
 }

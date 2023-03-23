@@ -39,6 +39,13 @@
                 <td th:text="${estudiante.beca}"></td>
                 <td th:text="${estudiante.facultad.nombre}"></td>
 
+                <td>
+                    <!-- Esto muestra un enlace junto a cada estudiante en el listado. Hay que crear el metodo actualizar en el MainConroller -->
+                    <a th:href="@{/frmActualizar/}+${estudiante.id}">Actualizar</a>
+                    <!-- lo que hay tras la / es una url, es un patrón. Debe existir algo que responda exactamente a lo que pone aqui -->
+                    <a th:href="@{/borrar/}+${estudiante.id}">Borrar</a>
+                    <a th:href="@{/detalles/}+${estudiante.id}">Ver detalles</a>
+                </td>
             </tr>
         </tbody>
     </table>
