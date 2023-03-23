@@ -66,22 +66,28 @@ public class MainController {
         return mav;
     }
 
-    /** Metodo que muestra el formulario de alta de estudiante */
-    @GetMapping("/frmAltaEstudiante")
-    public String formularioAltaEstudiante(Model model) {
+    // /** Metodo que muestra el formulario de alta de estudiante */
+    // @GetMapping("/frmAltaEstudiante")
+    // public String formularioAltaEstudiante(Model model) {
 
-        // Metodo que muestre una lista de facultades
-        List<Facultad> facultades = facultadService.findAll(); // esto se le manda al modelo abajo
+    // // Metodo que muestre una lista de facultades
+    // List<Facultad> facultades = facultadService.findAll(); // esto se le manda al
+    // modelo abajo
 
-        Estudiante estudiante = new Estudiante();
+    // Estudiante estudiante = new Estudiante();
 
-        // modelo creado antes del formulario
-        model.addAttribute("estudiante", estudiante);
-        model.addAttribute("facultades", facultades);
+    // // modelo creado antes del formulario
+    // model.addAttribute("estudiante", estudiante);
+    // model.addAttribute("facultades", facultades);
 
-        return "views/formularioAltaEstudiante";
+    // //¿Igual para telefonos?
+    // List<Telefono> Telefonoes = telefonoService.findAll(); // esto se le manda al
+    // modelo abajo
+    // model.addAttribute("telefonoes", telefonos);
 
-    }
+    // return "views/formularioAltaEstudiante";
+
+    // }
 
     /**
      * Metodo que recibe los datos procedentes de los controladores del formulario y
@@ -95,11 +101,10 @@ public class MainController {
         // información. Es una buena práctica de programación hacer esta comprobación
         // previa
         LOG.info("Telefonos recibidos: " + telefonosRecibidos);
- // Primero se guarda el estudiante para despues poder acceder a él a la hora de
+        // Primero se guarda el estudiante para despues poder acceder a él a la hora de
         // meterle los telefonos
         estudianteService.save(estudiante);
 
-       
         List<String> listadoNumerosTelefono = null; // la declaramos fuera,para poder utilizarla en varios sitios. Y le
                                                     // asignamos null, porque dentro de un método siempre hay que
                                                     // inicializarla (asignarle valor) para que funcione
@@ -113,8 +118,6 @@ public class MainController {
             // con ese flujo:
             listadoNumerosTelefono = Arrays.asList(arrayTelefonos);
         }
-
-       
 
         // si sí hay telefonos, el flujo lo recorremos e introducimos
         if (listadoNumerosTelefono != null) {
@@ -166,8 +169,23 @@ public class MainController {
     }
 
     @GetMapping("/borrar/{id}")
-    public String borrarEstudiante(@PathVariable(name= "id") int idEstudiante) {
+    public String borrarEstudiante(@PathVariable(name = "id") int idEstudiante) {
         estudianteService.delete(estudianteService.findById(idEstudiante));
         return "redirect:/listar";
+    }
+
+    /**
+     * Métodoque encuentre los telefonso de cada estudiante: (hecho por nosotras):
+     */
+    @GetMapping("/detalles/{id}")
+    public String detallesEstudiante(@PathVariable(name = "id") int id, Model model) {
+
+        Estudiante estudiante = estudianteService.findById(id);
+        List<Telefono> telefonos = telefonoService.findByEstudiante(estudiante);
+        List<String> numerosTelefono = telefonos.stream().map(t -> t.getNumero()).toList();
+
+        model.addAttribute("telefonos", numerosTelefono);
+        model.addAttribute("estudiante", estudiante);
+        return "views/detalleEstudiante";
     }
 }

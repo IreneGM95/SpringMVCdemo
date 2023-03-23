@@ -18,4 +18,6 @@ public interface TelefonoService {
 
     public void deleteByEstudiante(Estudiante estudiante);
 
+    public List<Telefono> findByEstudiante(Estudiante estudiante);
+
 }

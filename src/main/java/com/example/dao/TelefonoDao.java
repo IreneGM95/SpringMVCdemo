@@ -17,5 +17,9 @@ public interface TelefonoDao extends JpaRepository<Telefono, Integer> {
     // long deleteByEstudiante(@Param("idEstudiante") Integer idEstudiante);
 
     long deleteByEstudiante(Estudiante estudiante);
-    // List<Telefono> findByEstudiante(Estudiante estudiante);
+    
+
+
+    /**Es necesario crear un método que encuentre los telefonso de cada estudiante: */
+    List<Telefono> findByEstudiante(Estudiante estudiante);
 }
