@@ -21,6 +21,9 @@
     <h1 th:if="${estudiante != null}"
         th:text="'Detalles del estudiante ' + ${estudiante.nombre} + ' ' + ${estudiante.primerApellido}"></h1>
 
+    <!-- alt sirve de descriptor de imagen -->
+    <img alt="Imagen de un gato" th:src="@{/images/mauricio.png}" width="400 px">
+
     <div th:if="${telefonos != null}">
 
         <p>Telefonos:</p>

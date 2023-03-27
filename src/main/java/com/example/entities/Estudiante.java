@@ -49,6 +49,9 @@ public class Estudiante implements Serializable {
     private Genero genero;
     private double beca;
 
+    //Creamos una variable imagen para cada estudiante:
+    private String foto;
+
     // usamos fetchtype lazy para que no mantenga una conexión activa entre las tablas como harí eager, porque en telefonos tenemos persist. al usar lazy no estamos consumiendo un recurso ? 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idFacultad")
