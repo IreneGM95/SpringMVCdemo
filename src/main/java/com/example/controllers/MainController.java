@@ -96,7 +96,7 @@ public class MainController {
     @PostMapping("/altaModificacionEstudiante")
     public String altaEstudiante(@ModelAttribute Estudiante estudiante,
             @RequestParam(name = "numerosTelefonos") String telefonosRecibidos,
-            @RequestParam(name = "foto") MultipartFile imagen) {
+            @RequestParam(name = "imagen") MultipartFile imagen) {
         // El último @RequestParam Recoger el parametro que reconoce el parametro de
         // foto
 
@@ -109,20 +109,23 @@ public class MainController {
         if (!imagen.isEmpty()) {
             try {
                 // ruta relativa de donde voy a almacenar el archivo de imagen
-                Path rutaRelativa = Paths.get("src/main/resources/static/images/");
-
+                Path rutaRelativa = Paths.get("src/main/resources/static/images");
+                
                 // ruta absoluta, puede ser de tipo Path o de tipo String:
                 String rutaAbsoluta = rutaRelativa.toFile().getAbsolutePath();
                 // Array de bytes:
                 byte[] imagenEnBytes = imagen.getBytes();
 
+                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + imagen.getOriginalFilename());
+
                 // guardar imagen en la ruta absoluta, en el file system:
-                Files.write(Paths.get(rutaAbsoluta), imagenEnBytes);
+                Files.write(rutaCompleta, imagenEnBytes);
                 // Asociar la imagen con el objeto estudiante que se va a guardar
                 estudiante.setFoto(imagen.getOriginalFilename());
 
             } catch (Exception e) {
-                // TODO: handle exception
+                // TODO: handle 
+                e.printStackTrace();
             }
         }
 

@@ -22,7 +22,7 @@
         th:text="'Detalles del estudiante ' + ${estudiante.nombre} + ' ' + ${estudiante.primerApellido}"></h1>
 
     <!-- alt sirve de descriptor de imagen -->
-    <img alt="Imagen de un gato" th:src="@{/images/}+${estudiante.foto}" width="400 px">
+    <img alt="Imagen de un gato" th:src="@{/images/}+${estudiante.foto}">
 
     <div th:if="${telefonos != null}">
 
