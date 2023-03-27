@@ -10,7 +10,8 @@
 
 <body>
     <h1>Formulario de alta/modificación de estudiante</h1>
-    <form th:object="${estudiante}" th:action="@{/altaModificacionEstudiante}" method="post">
+    <form th:object="${estudiante}" th:action="@{/altaModificacionEstudiante}" method="post"
+    enctype="multipart/form-data">
 
         <!-- Guardar en un input oculto el id del estudiante: -->
         <input type="hidden" name="id" th:value="${estudiante.id} ">

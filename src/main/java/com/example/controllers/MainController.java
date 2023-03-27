@@ -1,5 +1,8 @@
 package com.example.controllers;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.entities.Estudiante;
@@ -91,13 +95,38 @@ public class MainController {
      */
     @PostMapping("/altaModificacionEstudiante")
     public String altaEstudiante(@ModelAttribute Estudiante estudiante,
-            @RequestParam(name = "numerosTelefonos") String telefonosRecibidos) {
+            @RequestParam(name = "numerosTelefonos") String telefonosRecibidos,
+            @RequestParam(name = "foto") MultipartFile imagen) {
+        // El último @RequestParam Recoger el parametro que reconoce el parametro de
+        // foto
 
         // gracias al log nos da un mensaje de comprobación antes de procesar la
         // información. Es una buena práctica de programación hacer esta comprobación
         // previa
         LOG.info("Telefonos recibidos: " + telefonosRecibidos);
-        // Primero se guarda el estudiante para despues poder acceder a él a la hora de
+
+        // Preguntar si viene una imagen:
+        if (!imagen.isEmpty()) {
+            try {
+                // ruta relativa de donde voy a almacenar el archivo de imagen
+                Path rutaRelativa = Paths.get("src/main/resources/static/images/");
+
+                // ruta absoluta, puede ser de tipo Path o de tipo String:
+                String rutaAbsoluta = rutaRelativa.toFile().getAbsolutePath();
+                // Array de bytes:
+                byte[] imagenEnBytes = imagen.getBytes();
+
+                // guardar imagen en la ruta absoluta, en el file system:
+                Files.write(Paths.get(rutaAbsoluta), imagenEnBytes);
+                // Asociar la imagen con el objeto estudiante que se va a guardar
+                estudiante.setFoto(imagen.getOriginalFilename());
+
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+        }
+
+        // Se guarda el estudiante para despues poder acceder a él a la hora de
         // meterle los telefonos
         estudianteService.save(estudiante);
 
@@ -184,4 +213,5 @@ public class MainController {
         model.addAttribute("estudiante", estudiante);
         return "views/detalleEstudiante";
     }
+
 }
