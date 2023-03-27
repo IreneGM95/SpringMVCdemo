@@ -2,8 +2,6 @@ package com.example.entities;
 
 import java.io.Serializable;
 
-import com.example.services.EstudianteService;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
