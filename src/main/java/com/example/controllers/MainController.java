@@ -108,23 +108,34 @@ public class MainController {
         // Preguntar si viene una imagen:
         if (!imagen.isEmpty()) {
             try {
-                // ruta relativa de donde voy a almacenar el archivo de imagen
-                Path rutaRelativa = Paths.get("src/main/resources/static/images");
-                
-                // ruta absoluta, puede ser de tipo Path o de tipo String:
-                String rutaAbsoluta = rutaRelativa.toFile().getAbsolutePath();
+                //PARA IMAGENES EN LA CARPETA STATIC DEL PROYECTO:
+                // // ruta relativa de donde voy a almacenar el archivo de imagen
+                // Path rutaRelativa = Paths.get("src/main/resources/static/images");
+
+                // // ruta absoluta, puede ser de tipo Path o de tipo String:
+                // String rutaAbsoluta = rutaRelativa.toFile().getAbsolutePath();
+                // // Array de bytes:
+                // byte[] imagenEnBytes = imagen.getBytes();
+
+                // Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + imagen.getOriginalFilename());
+
+                // // guardar imagen en la ruta absoluta, en el file system:
+                // Files.write(rutaCompleta, imagenEnBytes);
+                // // Asociar la imagen con el objeto estudiante que se va a guardar
+                // estudiante.setFoto(imagen.getOriginalFilename());
+
+                // Si es una imagen y la ruta es dentro de las carpetas del proyecto se usa /
+                // simple
+
+                // PARA IMAGENER EN  UNA CARPETA DEL ORDENADOR:
+                String rutaAbsoluta = "//home//irene//Recursos";
                 // Array de bytes:
                 byte[] imagenEnBytes = imagen.getBytes();
 
-                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" + imagen.getOriginalFilename());
-
-                // guardar imagen en la ruta absoluta, en el file system:
-                Files.write(rutaCompleta, imagenEnBytes);
-                // Asociar la imagen con el objeto estudiante que se va a guardar
-                estudiante.setFoto(imagen.getOriginalFilename());
+                Path rutaCompleta = Paths.get(rutaAbsoluta + "//" + imagen.getOriginalFilename());
 
             } catch (Exception e) {
-                // TODO: handle 
+                // TODO: handle
                 e.printStackTrace();
             }
         }

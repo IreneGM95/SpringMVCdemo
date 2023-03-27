@@ -22,7 +22,11 @@
         th:text="'Detalles del estudiante ' + ${estudiante.nombre} + ' ' + ${estudiante.primerApellido}"></h1>
 
     <!-- alt sirve de descriptor de imagen -->
-    <img alt="Imagen de un gato" th:src="@{/images/}+${estudiante.foto}">
+    <!-- Para leer de la carpeta static: -->
+    <!-- <img alt="Imagen de un gato" th:src="@{/images/}+${estudiante.foto}"> -->
+
+    <!-- Para abrir desde la carpeta del ordenador: -->
+    <img alt="Imagen de un gato" th:src="@{/Recursos/}+${estudiante.foto}">
 
     <div th:if="${telefonos != null}">
 
